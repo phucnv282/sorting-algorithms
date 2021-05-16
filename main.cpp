@@ -8,9 +8,15 @@ void bubbleSort(int arr[], int n, bool asc = true);
 
 void insertionSort(int arr[], int n, bool asc = true);
 
+void merge(int arr[], int l, int m, int r, bool asc);
+
 void mergeSort(int arr[], int l, int r, bool asc=true);
 
-void merge(int arr[], int l, int m, int r, bool asc);
+int partition(int arr[],int l,int r, bool asc);
+
+void quickSort(int arr[],int l,int r, bool asc=true);
+
+void countSort(int arr[],int n,bool asc=true);
 
 int main() {
     int arr[] = {6, 0, 2, 0, 1, 3, 4, 6, 1, 3, 2};
@@ -18,7 +24,9 @@ int main() {
     // selectionSort(arr, n, false);
     // bubbleSort(arr, n, false);
     // insertionSort(arr, n, false);
-    mergeSort(arr, 0, n - 1, false);
+    //mergeSort(arr, 0, n - 1, false);
+    //quickSort(arr,0,n-1,false);
+    countSort(arr,n,false);
     cout << "Sorted array: ";
     for (int i = 0; i < n; ++i) {
         cout << arr[i] << " ";
@@ -159,4 +167,78 @@ void mergeSort(int arr[], int l, int r,bool asc) {
     mergeSort(arr, l, m,asc);
     mergeSort(arr, m + 1, r,asc);
     merge(arr, l, m, r,asc);
+}
+
+int partition(int arr[], int l,int r, bool asc) {
+    if(asc){
+        int pivot = arr[r];
+        int i = l-1;
+        for(int j=l;j<r;++j){
+            if(arr[j]<pivot) {
+                ++i;
+
+                int tmp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=tmp;
+            }
+        }
+
+        int tmp=arr[i+1];
+        arr[i+1]=pivot;
+        arr[r]=tmp;
+        return i+1;
+    }else{
+        int pivot = arr[r];
+        int i = l-1;
+        for(int j=l;j<r;++j){
+            if(arr[j]>pivot) {
+                ++i;
+
+                int tmp=arr[i];
+                arr[i]=arr[j];
+                arr[j]=tmp;
+            }
+        }
+
+        int tmp=arr[i+1];
+        arr[i+1]=pivot;
+        arr[r]=tmp;
+        return i+1;
+    }
+}
+
+void quickSort(int arr[],int l,int r, bool asc) {
+    if(r<=l) return;
+
+    int piIdx = partition(arr,l,r,asc);
+
+    quickSort(arr,l,piIdx-1,asc);
+    quickSort(arr,piIdx+1,r,asc);
+}
+
+void countSort(int arr[], int n,bool asc) {
+    int max = *max_element(arr,arr+n);
+    int min = *min_element(arr,arr+n);
+    int range=max-min+1;
+    int count[range];
+    int sortedArr[n];
+    memset(count,0,sizeof(count));
+
+    for(int i=0;i<n;++i)
+        count[arr[i]-min]++;
+    for(int i=1;i<range;++i)
+        count[i]+=count[i-1];
+    if(asc) {
+        for(int i=0;i<n;++i){
+            sortedArr[count[arr[i]]-1]=arr[i];
+            count[arr[i]-min]--;
+        }
+    } else {
+        for(int i=0;i<n;++i){
+            sortedArr[n-(count[arr[i]]-1)-1]=arr[i];
+            count[arr[i]-min]--;
+        }
+    }
+    for(int i=0;i<n;++i)
+        arr[i]=sortedArr[i];
 }
