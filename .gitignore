@@ -1,7 +1,6 @@
 .idea
 cmake-build-debug
-cmake-build-release/*
-!cmake-build-release/*.bat
+cmake-build-release
 
 # Created by .ignore support plugin (hsz.mobi)
 ### C++ template
