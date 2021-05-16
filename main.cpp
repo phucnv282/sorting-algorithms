@@ -8,9 +8,9 @@ void bubbleSort(int arr[], int n, bool asc = true);
 
 void insertionSort(int arr[], int n, bool asc = true);
 
-void mergeSort(int arr[], int l, int r);
+void mergeSort(int arr[], int l, int r, bool asc=true);
 
-void merge(int arr[], int l, int m, int r);
+void merge(int arr[], int l, int m, int r, bool asc);
 
 int main() {
     int arr[] = {6, 0, 2, 0, 1, 3, 4, 6, 1, 3, 2};
@@ -18,7 +18,7 @@ int main() {
     // selectionSort(arr, n, false);
     // bubbleSort(arr, n, false);
     // insertionSort(arr, n, false);
-    mergeSort(arr, 0, n - 1);
+    mergeSort(arr, 0, n - 1, false);
     cout << "Sorted array: ";
     for (int i = 0; i < n; ++i) {
         cout << arr[i] << " ";
@@ -108,15 +108,55 @@ void insertionSort(int arr[], int n, bool asc) {
     }
 }
 
-void merge(int arr[], int l, int m, int r) {
+void merge(int arr[], int l, int m, int r,bool asc) {
+    int n1 = m-l+1, n2=r-m;
+    int arr1[n1], arr2[n2];
+    for (int i=0;i<n1;++i)
+        arr1[i]=arr[l+i];
+    for(int i=0;i<n2;++i) 
+        arr2[i]=arr[m+1+i];
 
+    int i=0,j=0,k=l;
+    if(asc) {
+        while(i<n1&&j<n2) {
+            if(arr1[i]<=arr2[j]) {
+                arr[k]=arr1[i];
+                ++i;
+            } else {
+                arr[k]=arr2[j];
+                ++j;
+            }
+            ++k;
+        }
+    } else {
+        while(i<n1&&j<n2) {
+            if(arr1[i]>=arr2[j]) {
+                arr[k]=arr1[i];
+                ++i;
+            } else {
+                arr[k]=arr2[j];
+                ++j;
+            }
+            ++k;
+        }
+    }
+    while(i<n1){
+        arr[k]=arr1[i];
+        ++i;
+        ++k;
+    }
+    while(j<n2){
+        arr[k]=arr2[j];
+        ++j;
+        ++k;
+    }
 }
 
-void mergeSort(int arr[], int l, int r) {
+void mergeSort(int arr[], int l, int r,bool asc) {
     if (l >= r)
         return;
     int m = l + (r - l) / 2;
-    mergeSort(arr, l, m);
-    mergeSort(arr, m + 1, r);
-    merge(arr, l, m, r);
+    mergeSort(arr, l, m,asc);
+    mergeSort(arr, m + 1, r,asc);
+    merge(arr, l, m, r,asc);
 }
